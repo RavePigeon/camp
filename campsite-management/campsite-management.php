@@ -216,6 +216,56 @@ function campsite_guest_form_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('campsite_guest_form', 'campsite_guest_form_shortcode');
+
+// Add submenu page under Campsite Management for viewing guests
+add_action('admin_menu', function() {
+    add_submenu_page(
+        'campsite-management',           // Parent slug
+        'View Guests',                   // Page title
+        'View Guests',                   // Menu title
+        'manage_options',                // Capability
+        'campsite-view-guests',          // Menu slug
+        'campsite_view_guests_callback'  // Function to display the page
+    );
+});
+
+// Callback function to display guests
+function campsite_view_guests_callback() {
+    global $wpdb;
+    $guests_table = $wpdb->prefix . 'campsite_guests';
+    $guests = $wpdb->get_results("SELECT * FROM $guests_table ORDER BY created_at DESC");
+
+    echo '<div class="wrap"><h1>Guest Records</h1>';
+    if ($guests) {
+        echo '<table class="widefat fixed" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody>';
+        foreach ($guests as $guest) {
+            echo '<tr>
+                <td>' . esc_html($guest->id) . '</td>
+                <td>' . esc_html($guest->first_name) . '</td>
+                <td>' . esc_html($guest->last_name) . '</td>
+                <td>' . esc_html($guest->email) . '</td>
+                <td>' . esc_html($guest->phone) . '</td>
+                <td>' . esc_html($guest->created_at) . '</td>
+            </tr>';
+        }
+        echo '</tbody></table>';
+    } else {
+        echo '<p>No guest records found.</p>';
+    }
+    echo '</div>';
+}
+
 // Pitchup API Sync
 function campsite_sync_with_pitchup($pitch_id, $check_in, $check_out) {
     $api_key = 'YOUR_API_KEY'; // Replace with your actual Pitchup API key
