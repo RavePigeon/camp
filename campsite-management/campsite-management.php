@@ -266,6 +266,85 @@ function campsite_view_guests_callback() {
     echo '</div>';
 }
 
+
+// 1. Add submenu under "Campsite Management" for Pitch Types
+add_action('admin_menu', function() {
+    add_submenu_page(
+        'campsite-management',          // Parent slug
+        'Add Pitch Type',               // Page title
+        'Add Pitch Type',               // Menu title
+        'manage_options',               // Capability
+        'campsite-add-pitch-type',      // Menu slug
+        'campsite_add_pitch_type_page'  // Callback
+    );
+});
+
+// 2. Callback function to display and handle the form
+function campsite_add_pitch_type_page() {
+    global $wpdb;
+    $pitch_types_table = $wpdb->prefix . 'campsite_pitch_types';
+    $message = '';
+
+    // Handle form submission
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['campsite_add_pitch_type_submit'])) {
+        $type_name      = sanitize_text_field($_POST['type_name']);
+        $description    = sanitize_textarea_field($_POST['description']);
+        $max_occupancy  = intval($_POST['max_occupancy']);
+        $price_per_night = floatval($_POST['price_per_night']);
+
+        if ($type_name && $max_occupancy && $price_per_night) {
+            $result = $wpdb->insert(
+                $pitch_types_table,
+                [
+                    'type_name'        => $type_name,
+                    'description'      => $description,
+                    'max_occupancy'    => $max_occupancy,
+                    'price_per_night'  => $price_per_night,
+                ],
+                ['%s', '%s', '%d', '%f']
+            );
+            if ($result) {
+                $message = '<p style="color:green;">Pitch type added successfully!</p>';
+            } else {
+                $message = '<p style="color:red;">Failed to add pitch type. Please try again.</p>';
+            }
+        } else {
+            $message = '<p style="color:red;">Please complete all required fields.</p>';
+        }
+    }
+
+    // Form markup
+    ?>
+    <div class="wrap">
+        <h1>Add Pitch Type</h1>
+        <?php echo $message; ?>
+        <form method="post">
+            <table class="form-table">
+                <tr>
+                    <th><label for="type_name">Type Name*</label></th>
+                    <td><input type="text" name="type_name" id="type_name" required></td>
+                </tr>
+                <tr>
+                    <th><label for="description">Description</label></th>
+                    <td><textarea name="description" id="description" rows="3"></textarea></td>
+                </tr>
+                <tr>
+                    <th><label for="max_occupancy">Max Occupancy*</label></th>
+                    <td><input type="number" name="max_occupancy" id="max_occupancy" min="1" required></td>
+                </tr>
+                <tr>
+                    <th><label for="price_per_night">Price Per Night (£)*</label></th>
+                    <td><input type="number" name="price_per_night" id="price_per_night" min="0" step="0.01" required></td>
+                </tr>
+            </table>
+            <p>
+                <input type="submit" name="campsite_add_pitch_type_submit" class="button button-primary" value="Add Pitch Type">
+            </p>
+        </form>
+    </div>
+    <?php
+}
+
 // Pitchup API Sync
 function campsite_sync_with_pitchup($pitch_id, $check_in, $check_out) {
     $api_key = 'YOUR_API_KEY'; // Replace with your actual Pitchup API key
