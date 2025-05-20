@@ -70,6 +70,13 @@ function campsite_create_or_update_tables() {
         guest_price DECIMAL(10,2) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
+        dbDelta("CREATE TABLE $pitch_zone_table (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        pitch_zone_code VARCHAR(50) NOT NULL,
+        pitch_zone_name TEXT,
+        pitch_zone_description TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );");
 }
 
 // Admin Menu
