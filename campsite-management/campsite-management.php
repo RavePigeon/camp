@@ -321,7 +321,7 @@ function campsite_add_pitch_type_page() {
         <form method="post">
             <table class="form-table">
                 <tr>
-                    <th><label for="type_name">Type Name*</label></th>
+                    <th><label for="type_name">Pitch Code*</label></th>
                     <td><input type="text" name="type_name" id="type_name" required></td>
                 </tr>
                 <tr>
@@ -329,11 +329,7 @@ function campsite_add_pitch_type_page() {
                     <td><textarea name="description" id="description" rows="3"></textarea></td>
                 </tr>
                 <tr>
-                    <th><label for="max_occupancy">Max Occupancy*</label></th>
-                    <td><input type="number" name="max_occupancy" id="max_occupancy" min="1" required></td>
-                </tr>
-                <tr>
-                    <th><label for="price_per_night">Price Per Night (£)*</label></th>
+                    <th><label for="price_per_night">Basic Pitch Fee (£)*</label></th>
                     <td><input type="number" name="price_per_night" id="price_per_night" min="0" step="0.01" required></td>
                 </tr>
             </table>
