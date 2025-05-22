@@ -6,9 +6,7 @@
  * Author: ...
  */
 
-
 if (!defined('ABSPATH')) exit;
-
 
 // Load database setup
 require_once plugin_dir_path(__FILE__) . 'includes/db/db-create-tables.php';
@@ -26,10 +24,6 @@ if (is_admin()) {
     require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-pitch-zones.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-pitch-list.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-settings.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-view-guests.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-add-pitch-type.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-manage-pitch-type.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-pitch-guest-fees.php';
     // Add others as needed
 }
 
